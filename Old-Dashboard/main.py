@@ -2,6 +2,7 @@
 # Authors: Dana Maloney, William Ellis
 # Version: 0.0.1
 # Date:    1/30/2024
+
 import sys
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import QQmlApplicationEngine
@@ -19,7 +20,6 @@ print("Engine Initialized")
 # If the app quits, shutdown engine object
 #engine.quit.connect(app.quit)
 
-
 # Load UI from file
 engine.load('main.qml')
 
@@ -27,15 +27,15 @@ print("Loaded file \'main.qml\' from working dir.")
 
 class ParameterUpdater(QObject):
 
-	#oilChanged = pyqtSignal(str, arguments=['oil'])
+	oilChanged = pyqtSignal(str, arguments=['oilValue'])
 	rpmChanged = pyqtSignal(str, arguments=['rpmValue'])
-	#tempChanged = Signal(str)
+	tempChanged = pyqtSignal(str, arguments=['tempValue'])
 
 	def __init__(self):
 		super().__init__()
-		#self.oil_value = "0"
+		self.oil_value = "0"
 		self.rpm_value = "1200"
-		#self.temp_value = "0"
+		self.temp_value = "0"
 
 		self.timer = QTimer()
 		self.timer.timeout.connect(self.update_parameters)
@@ -43,15 +43,14 @@ class ParameterUpdater(QObject):
 
 	def update_parameters(self):
         # Example: Update parameters
-		#self.oil_value = str(int(self.oil_value) + 1)
-		self.rmp_value = str(int(self.rpm_value) + 10)
-		#self.temp_value = str(int(self.temp_value) + 1)
+		self.oil_value = str(int(self.oil_value) + 1)
+		self.rpm_value = str(int(self.rpm_value) + 10)
+		self.temp_value = str(int(self.temp_value) + 1)
 
         # Emit signals to notify QML of parameter changes
-		#self.oilChanged.emit(self.oil_value)
-		self.rpmChanged.emit(self.rpm_value)
-		#self.tempChanged.emit(self.temp_value)
-
+		self.oilChanged.emit(self.oil_value + "PSI")
+		self.rpmChanged.emit(self.rpm_value + "RPM")
+		self.tempChanged.emit(self.temp_value + "℃")
 
 if __name__ == '__main__':
 
