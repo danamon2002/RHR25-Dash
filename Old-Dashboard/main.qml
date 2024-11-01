@@ -24,7 +24,7 @@ ApplicationWindow{
 		color: "black" // fills the display so it isn't the hecking sun
 
 		Rectangle {
-			color: "chartreuse"
+			color: Qt.rgba(0.5, 1, 0)
 			width: doubleValue
 			height: 100
 		}
