@@ -18,14 +18,18 @@ ApplicationWindow{
 	property string rpmValue: "0" 
 	property string oilValue: "0"
 	property string tempValue: "0"
-	property double doubleValue: parseFloat(rpmValue) * 0.11
+	property double rectWidth: parseFloat(rpmValue) * 0.11
+	//property double tachGreen: qml.pow(-2, (-0.0001 * parseFloat(rpmValue) - 14 ) + 1)
+	property double tachGreen: 1.6 - parseFloat(rpmValue) / 14000
+	property double tachRed: parseFloat(rpmValue) / 14000
+
 	Rectangle {	
 		anchors.fill: parent
 		color: "black" // fills the display so it isn't the hecking sun
 
 		Rectangle {
-			color: Qt.rgba(0.5, 1, 0)
-			width: doubleValue
+			color: Qt.rgba(tachRed, tachGreen, 0, 1)
+			width: rectWidth
 			height: 100
 		}
 

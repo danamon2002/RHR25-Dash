@@ -39,12 +39,12 @@ class ParameterUpdater(QObject):
 
 		self.timer = QTimer()
 		self.timer.timeout.connect(self.update_parameters)
-		self.timer.start(50)  # Update every x second
+		self.timer.start(100)  # Update every x second
 
 	def update_parameters(self):
         # Example: Update parameters
 		self.oil_value = str(round(float(self.oil_value) + 1.2, 1))
-		self.rpm_value = str(int(self.rpm_value) + 50)
+		self.rpm_value = str(int(self.rpm_value) + 200)
 		self.temp_value = str(round(float(self.temp_value) + 1.41, 1))
 
         # Emit signals to notify QML of parameter changes
