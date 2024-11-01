@@ -18,19 +18,69 @@ ApplicationWindow{
 	property string rpmValue: "0" 
 	property string oilValue: "0"
 	property string tempValue: "0"
-	property double rectWidth: parseFloat(rpmValue) * 0.11
+	property double scaleFactor: 0.11
+	property double rectWidth: parseFloat(rpmValue) * scaleFactor
 	//property double tachGreen: qml.pow(-2, (-0.0001 * parseFloat(rpmValue) - 14 ) + 1)
 	property double tachGreen: 1.6 - parseFloat(rpmValue) / 14000
 	property double tachRed: parseFloat(rpmValue) / 14000
+
+    property int maxWidth: 1600  // Maximum width to reach final illumination
+    property int circleSpacing: 100
 
 	Rectangle {	
 		anchors.fill: parent
 		color: "black" // fills the display so it isn't the hecking sun
 
+		Row {
+			id: shiftLights
+        	spacing: 70
+        	anchors.horizontalCenter: parent.horizontalCenter
+        	anchors.top: parent.top
+        	anchors.topMargin: 20
+
+        	Repeater {
+            	model: mainRect.markerPositions
+        		Rectangle {
+                	width: 20
+                	height: 20
+                	radius: 10
+                	color: (index === 0 || index === 14) && mainRect.width >= circleSpacing ? "chartreuse" :
+                       (index === 1 || index === 13) && mainRect.width >= 2 * circleSpacing ? "chartreuse" :
+                       (index === 2 || index === 12) && mainRect.width >= 3 * circleSpacing ? "chartreuse" :
+					   (index === 3 || index === 11) && mainRect.width >= 4 * circleSpacing ? "red" :
+                       (index === 4 || index === 10) && mainRect.width >= 7 * circleSpacing ? "red" :
+					   (index === 5 || index === 9) && mainRect.width >= 8 * circleSpacing ? "red" :
+                       (index === 6 || index === 8) && mainRect.width >= 12 * circleSpacing ? "purple" :
+					   (index === 7) && mainRect.width >= 16 * circleSpacing ? "purple" :
+                       "gray"
+            	}
+        	}
+    	}
+
 		Rectangle {
+			id: mainRect
 			color: Qt.rgba(tachRed, tachGreen, 0, 1)
 			width: rectWidth
 			height: 100
+			anchors.top: shiftLights.bottom
+			anchors.topMargin: 20
+
+        	// Specify the width values for the markers
+        	property var markerPositions: [1000 * scaleFactor, 2000 * scaleFactor, 3000 * scaleFactor, 4000 * scaleFactor, 5000 * scaleFactor, 6000 * scaleFactor, 7000 * scaleFactor, 8000 * scaleFactor, 9000 * scaleFactor, 10000 * scaleFactor, 11000 * scaleFactor, 12000 * scaleFactor, 13000 * scaleFactor, 14000 * scaleFactor, 15000 * scaleFactor]
+
+        	// Create markers at specified width values
+        	Repeater {
+            	model: mainRect.markerPositions
+            	Rectangle {
+                	width: 2
+                	height: mainRect.height
+                	color: "black"
+                	x: modelData  // Position marker according to specified width values
+					Text {
+						text: " " + (modelData / scaleFactor) / 1000
+					}
+            	}
+			}
 		}
 
 		RowLayout {
