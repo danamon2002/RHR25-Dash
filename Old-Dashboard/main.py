@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
-# Authors: Dana Maloney, William Ellis
-# Version: 0.0.1
-# Date:    1/30/2024
+# Authors: Dana Maloney, William Ellis, Ryan Politis
+# Version: 0.0.2
+# Date:    11/1/2024
 
 import sys
 from PyQt5.QtGui import QGuiApplication
@@ -34,18 +34,18 @@ class ParameterUpdater(QObject):
 	def __init__(self):
 		super().__init__()
 		self.oil_value = "0"
-		self.rpm_value = "1200"
+		self.rpm_value = "1500"
 		self.temp_value = "0"
 
 		self.timer = QTimer()
 		self.timer.timeout.connect(self.update_parameters)
-		self.timer.start(1000)  # Update every 1 second
+		self.timer.start(50)  # Update every x second
 
 	def update_parameters(self):
         # Example: Update parameters
-		self.oil_value = str(int(self.oil_value) + 1)
-		self.rpm_value = str(int(self.rpm_value) + 10)
-		self.temp_value = str(int(self.temp_value) + 1)
+		self.oil_value = str(round(float(self.oil_value) + 1.2, 1))
+		self.rpm_value = str(int(self.rpm_value) + 50)
+		self.temp_value = str(round(float(self.temp_value) + 1.41, 1))
 
         # Emit signals to notify QML of parameter changes
 		self.oilChanged.emit(self.oil_value + "PSI")

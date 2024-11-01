@@ -1,7 +1,7 @@
 /*
 	Dashboard Display QML File
 	UI file for dashboard Display Variables
-	Authors: William Ellis, Dana Maloney
+	Authors: William Ellis, Dana Maloney, Ryan Politis
 */
 // Import necessary modules from QtQuick
 import QtQuick 2.15
@@ -18,9 +18,16 @@ ApplicationWindow{
 	property string rpmValue: "0" 
 	property string oilValue: "0"
 	property string tempValue: "0"
+	property double doubleValue: parseFloat(rpmValue) * 0.11
 	Rectangle {	
 		anchors.fill: parent
 		color: "black" // fills the display so it isn't the hecking sun
+
+		Rectangle {
+			color: "chartreuse"
+			width: doubleValue
+			height: 100
+		}
 
 		RowLayout {
 			anchors.fill: parent
@@ -46,7 +53,7 @@ ApplicationWindow{
 				Text {
 					text: tempValue
 					font.pixelSize: 64
-					color: "blue"
+					color: "cyan"
 				}
 			}
 		}
