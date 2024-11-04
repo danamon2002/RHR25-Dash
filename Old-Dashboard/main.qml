@@ -18,7 +18,7 @@ ApplicationWindow{
 	property string rpmValue: "0" 
 	property string oilValue: "0"
 	property string tempValue: "0"
-	property double scaleFactor: 0.10
+	property double scaleFactor: 0.1
 	property double rectWidth: parseFloat(rpmValue) * scaleFactor
 	//property double tachGreen: qml.pow(-2, (-0.0001 * parseFloat(rpmValue) - 14 ) + 1)
 	property double tachGreen: 1.6 - parseFloat(rpmValue) / 14000
@@ -28,6 +28,7 @@ ApplicationWindow{
 		anchors.fill: parent
 		color: "black" // fills the display so it isn't the hecking sun
 
+		// Shift light row
 		Row {
 			id: shiftLights
         	spacing: 70
@@ -54,55 +55,70 @@ ApplicationWindow{
         	}
     	}
 
-		Row {
-			id: tachLabels
+		// Tach column
+		ColumnLayout {
 			anchors.top: shiftLights.bottom
 			anchors.topMargin: 20
-			Repeater {
-			model: mainRect.labeledMarkers
+			Row {
+				id: tachLabels
+				Repeater {
+				model: mainRect.labeledMarkers
+					Rectangle {
+						x: modelData  // Position marker according to specified width values
+						Text {
+							text: (modelData / scaleFactor) / 1000
+							color: (index === 14 || index === 15 || index === 16) ? "red" :
+							"white"
+						}
+					}
+				}
+			}
+
+			// Tach line
+			Row {
+				id: tachLine
+					anchors.top: tachLabels.bottom
+					anchors.topMargin: 20
 				Rectangle {
-					x: modelData  // Position marker according to specified width values
-					Text {
-						text: (modelData / scaleFactor) / 1000
-						color: (index === 14 || index === 15 || index === 16) ? "red" :
-						"white"
+					width: 1500
+					height: 2
+					color: "white"
+				}
+				Rectangle {
+					width: 500
+					height: 2
+					color: "red"
+				}
+			}
+
+			// RPM
+			Rectangle {
+				id: mainRect
+				color: Qt.rgba(tachRed, tachGreen, 0, 1)
+				width: Math.min(rectWidth, 1920)
+				height: 100
+				anchors.top: tachLine.bottom
+				anchors.topMargin: 5
+
+				// Specify the width values for all markers
+				property var markerPositions: Array.from({length: 34}, (v, i) => (i + 1) * 500 * scaleFactor)
+				// Filter labeled markers
+				property var labeledMarkers: markerPositions.filter((value, index) => (index + 1) % 2 === 0)
+
+				// Create markers at specified width values
+				Repeater {
+					model: mainRect.markerPositions
+					Rectangle {
+						width: 5
+						height: mainRect.height
+						color: "black"
+						x: modelData  // Position marker according to specified width values
 					}
 				}
 			}
 		}
-
-		Rectangle {
-			id: tachLine
-			anchors.top: tachLabels.bottom
-			anchors.topMargin: 20
-			width: 1920
-			height: 2
-		}
-
-		Rectangle {
-			id: mainRect
-			color: Qt.rgba(tachRed, tachGreen, 0, 1)
-			width: Math.min(rectWidth, 1920)
-			height: 100
-			anchors.top: tachLine.bottom
-			anchors.topMargin: 5
-
-        	// Specify the width values for all markers
-    		property var markerPositions: Array.from({length: 34}, (v, i) => (i + 1) * 500 * scaleFactor)
-			// Filter labeled markers
-    		property var labeledMarkers: markerPositions.filter((value, index) => (index + 1) % 2 === 0)
-
-        	// Create markers at specified width values
-        	Repeater {
-            	model: mainRect.markerPositions
-            	Rectangle {
-                	width: 5
-                	height: mainRect.height
-                	color: "black"
-                	x: modelData  // Position marker according to specified width values
-            	}
-			}
-		}
+		
+		
 
 		RowLayout {
 			anchors.fill: parent
