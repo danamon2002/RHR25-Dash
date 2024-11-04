@@ -18,7 +18,7 @@ ApplicationWindow{
 	property string rpmValue: "0" 
 	property string oilValue: "0"
 	property string tempValue: "0"
-	property double scaleFactor: 0.1
+	property double scaleFactor: 0.099
 	property double rectWidth: parseFloat(rpmValue) * scaleFactor
 	//property double tachGreen: qml.pow(-2, (-0.0001 * parseFloat(rpmValue) - 14 ) + 1)
 	property double tachGreen: 1.6 - parseFloat(rpmValue) / 14000
@@ -81,12 +81,12 @@ ApplicationWindow{
 				Layout.alignment: Qt.AlignTop
 				Layout.topMargin: 20
 				Rectangle {
-					width: 1500
+					width: 15000 * scaleFactor
 					height: 2
 					color: "white"
 				}
 				Rectangle {
-					width: 500
+					width: 2000 * scaleFactor
 					height: 2
 					color: "red"
 				}
@@ -96,7 +96,7 @@ ApplicationWindow{
 			Rectangle {
 				id: mainRect
 				color: Qt.rgba(tachRed, tachGreen, 0, 1)
-				width: Math.min(rectWidth, 1920)
+				width: Math.min(rectWidth, 17000 * scaleFactor)
 				height: 100
 				Layout.alignment: Qt.AlignTop
 
