@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-# Authors: Dana Maloney, William Ellis, Ryan Politis
+# Authors: Dana Maloney, William Ellis, Ryan Politis, Justin Da Silva
 # Version: 0.0.5
 # Date:    11/1/2024
 

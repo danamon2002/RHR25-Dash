@@ -1,7 +1,7 @@
 /*
 	Dashboard Display QML File
 	UI file for dashboard Display Variables
-	Authors: William Ellis, Dana Maloney, Ryan Politis
+	Authors: William Ellis, Dana Maloney, Ryan Politis, Justin Da Silva
 */
 // Import necessary modules from QtQuick
 import QtQuick 2.15
@@ -48,8 +48,8 @@ ApplicationWindow{
 					   (index === 3 || index === 11) && rectWidth >= 7000 * scaleFactor ? "red" :
                        (index === 4 || index === 10) && rectWidth >= 9000 * scaleFactor ? "red" :
 					   (index === 5 || index === 9) && rectWidth >= 11000 * scaleFactor ? "red" :
-                       (index === 6 || index === 8) && rectWidth >= 13000 * scaleFactor ? "purple" :
-					   (index === 7) && rectWidth >= 15000 * scaleFactor ? "purple" :
+                       (index === 6 || index === 8) && rectWidth >= 13000 * scaleFactor ? "orchid" :
+					   (index === 7) && rectWidth >= 15000 * scaleFactor ? "orchid" :
                        "gray"
             	}
         	}
