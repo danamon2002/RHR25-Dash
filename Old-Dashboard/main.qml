@@ -61,6 +61,7 @@ ApplicationWindow{
 			anchors.topMargin: 20
 			Row {
 				id: tachLabels
+				Layout.alignment: Qt.AlignTop
 				Repeater {
 				model: mainRect.labeledMarkers
 					Rectangle {
@@ -77,8 +78,8 @@ ApplicationWindow{
 			// Tach line
 			Row {
 				id: tachLine
-					anchors.top: tachLabels.bottom
-					anchors.topMargin: 20
+				Layout.alignment: Qt.AlignTop
+				Layout.topMargin: 20
 				Rectangle {
 					width: 1500
 					height: 2
@@ -97,8 +98,7 @@ ApplicationWindow{
 				color: Qt.rgba(tachRed, tachGreen, 0, 1)
 				width: Math.min(rectWidth, 1920)
 				height: 100
-				anchors.top: tachLine.bottom
-				anchors.topMargin: 5
+				Layout.alignment: Qt.AlignTop
 
 				// Specify the width values for all markers
 				property var markerPositions: Array.from({length: 34}, (v, i) => (i + 1) * 500 * scaleFactor)
