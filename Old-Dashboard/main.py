@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 # Authors: Dana Maloney, William Ellis, Ryan Politis
-# Version: 0.0.3
+# Version: 0.0.4
 # Date:    11/1/2024
 
 import sys
