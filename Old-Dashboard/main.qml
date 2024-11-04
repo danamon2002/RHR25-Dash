@@ -1,7 +1,7 @@
 /*
 	Dashboard Display QML File
 	UI file for dashboard Display Variables
-	Authors: William Ellis, Dana Maloney, Ryan Politis
+	Authors: William Ellis, Dana Maloney, Ryan Politis, Justin Da Silva
 */
 // Import necessary modules from QtQuick
 import QtQuick 2.15
@@ -20,6 +20,10 @@ ApplicationWindow{
 	property string tempValue: "0"
 	property double scaleFactor: 0.11
 	property double rectWidth: parseFloat(rpmValue) * scaleFactor
+	property double oilLightInd: parseFloat(oilValue) 				//Double to be checked 
+	property double tempLightInd: parseFloat(tempValue)
+	property double oilRedLower: 1.6 - parseFloat(oilValue) / 35    
+	property double oilGreenLower: parseFloat(oilValue) / 35
 	//property double tachGreen: qml.pow(-2, (-0.0001 * parseFloat(rpmValue) - 14 ) + 1)
 	property double tachGreen: 1.6 - parseFloat(rpmValue) / 14000
 	property double tachRed: parseFloat(rpmValue) / 14000
@@ -83,6 +87,10 @@ ApplicationWindow{
 			}
 		}
 
+		
+	
+
+		
 		RowLayout {
 			anchors.fill: parent
 			Layout.alignment: Qt.AlignVCenter
@@ -91,8 +99,21 @@ ApplicationWindow{
 				Text {
 					text: oilValue
 					font.pixelSize: 64
-					color: "red"
-				}
+					color: "white"
+
+					Rectangle{								//Oil pressure warning 
+						anchors.top: parent.bottom
+						anchors.margins: 50
+						x: 93
+
+						Rectangle{
+							width:  40
+							height: 40
+							color: (oilLightInd <= 60) && (oilLightInd >= 35) ? Qt.rgba(0,1,0,1) : Qt.rgba(1,0,0,1)
+							radius: 35
+							}
+						}
+			     }
 			}
 		    ColumnLayout {
 				Layout.alignment: Qt.AlignCenter
@@ -108,10 +129,49 @@ ApplicationWindow{
 					text: tempValue
 					font.pixelSize: 64
 					color: "cyan"
+
+					Rectangle{							//Engine temp warning
+						anchors.top: parent.bottom
+						anchors.right: parent.right
+						anchors.margins: 50
+						
+
+						Rectangle{
+							x: -90
+							width:  40
+							height: 40
+							color: (tempLightInd <= 110) && (tempLightInd >= 70) ? Qt.rgba(0,1,0,1) : Qt.rgba(1,0,0,1)
+							radius: 35 
+							
+	
+							Behavior on color {
+                    			SequentialAnimation {
+								id: anim
+                        		loops: Animation.Infinite
+                        			ColorAnimation {from: "white"; to: "red"; duration: 300 }
+                        			ColorAnimation { from: "red"; to: "white";  duration: 300 }
+                    					}
+								}
+
+							
+							}
+						}
+
+
+
+
+
+
 				}
 			}
 		}
+
+		
+
 	
+
+
+		
 		Connections {	// Updater object exposes variables to python function
 			
 			target: parameterUpdater
@@ -124,6 +184,9 @@ ApplicationWindow{
 			}
 			function onTempChanged(msg) { 
 				tempValue = msg;
+			}
+			function onOilGreen(msg) {
+				oilGreen = msg;
 			}
 		}
 	}
