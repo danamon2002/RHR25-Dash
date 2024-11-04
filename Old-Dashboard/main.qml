@@ -22,9 +22,6 @@ ApplicationWindow{
 	property double rectWidth: parseFloat(rpmValue) * scaleFactor
 	property double oilLightInd: parseFloat(oilValue) 				//Double to be checked 
 	property double tempLightInd: parseFloat(tempValue)
-	property double oilRedLower: 1.6 - parseFloat(oilValue) / 35    
-	property double oilGreenLower: parseFloat(oilValue) / 35
-	//property double tachGreen: qml.pow(-2, (-0.0001 * parseFloat(rpmValue) - 14 ) + 1)
 	property double tachGreen: 1.6 - parseFloat(rpmValue) / 14000
 	property double tachRed: parseFloat(rpmValue) / 14000
 
@@ -111,8 +108,8 @@ ApplicationWindow{
 							height: 40
 							color: (oilLightInd <= 60) && (oilLightInd >= 35) ? Qt.rgba(0,1,0,1) : Qt.rgba(1,0,0,1)
 							radius: 35
-							}
 						}
+					}
 			     }
 			}
 		    ColumnLayout {
@@ -146,16 +143,15 @@ ApplicationWindow{
 	
 							Behavior on color {
                     			SequentialAnimation {
-								id: anim
-                        		loops: Animation.Infinite
+                        			loops: Animation.Infinite
                         			ColorAnimation {from: "white"; to: "red"; duration: 300 }
                         			ColorAnimation { from: "red"; to: "white";  duration: 300 }
-                    					}
-								}
+                    			}
+							}
 
 							
-							}
 						}
+					}
 
 
 
