@@ -102,68 +102,70 @@ ApplicationWindow{
 						anchors.top: parent.bottom
 						anchors.margins: 50
 						x: 93
-
 						Rectangle{
-							width:  40
-							height: 40
-							color: (oilLightInd <= 60) && (oilLightInd >= 35) ? Qt.rgba(0,1,0,1) : Qt.rgba(1,0,0,1)
-							radius: 35
+							width:  50
+							height: 50
+							radius: 40
+							property bool oilWarning: (oilLightInd >= 35) && (oilLightInd <= 60)
+							color: oilWarning ? normalColor : errorColor
+    						property color normalColor: Qt.rgba(0,1,0,1)
+							property color errorColor: Qt.rgba(1,0,0,1)
+							SequentialAnimation on errorColor {			//Blink
+								loops: Animation.Infinite
+								running: !oilWarning
+								ColorAnimation {from: "white"; to: "red"; duration: 300 }
+								ColorAnimation { from: "red"; to: "white";  duration: 300 }
+    							}
 						}
 					}
 			     }
 			}
+			
 		    ColumnLayout {
 				Layout.alignment: Qt.AlignCenter
 				Text {
 					text: rpmValue
 					font.pixelSize: 64
-					color: "chartreuse"
+					color: "white"
 				}
 			}
+
 			ColumnLayout {
 				Layout.alignment: Qt.AlignRight
 				Text {
 					text: tempValue
 					font.pixelSize: 64
-					color: "cyan"
+					color: "white"
 
 					Rectangle{							//Engine temp warning
 						anchors.top: parent.bottom
 						anchors.right: parent.right
 						anchors.margins: 50
-						
-
 						Rectangle{
 							x: -90
-							width:  40
-							height: 40
-							color: (tempLightInd <= 110) && (tempLightInd >= 70) ? Qt.rgba(0,1,0,1) : Qt.rgba(1,0,0,1)
-							radius: 35 
-							
-	
-							Behavior on color {
-                    			SequentialAnimation {
-                        			loops: Animation.Infinite
-                        			ColorAnimation {from: "white"; to: "red"; duration: 300 }
-                        			ColorAnimation { from: "red"; to: "white";  duration: 300 }
-                    			}
-							}
-
-							
+							width:  50
+							height: 50
+							radius: 40
+							property bool tempWarning: (tempLightInd <= 100) && (tempLightInd >= 70)
+							color: tempWarning ? normalColor : errorColor
+    						property color normalColor: Qt.rgba(0,1,0,1)
+							property color errorColor: Qt.rgba(1,0,0,1)
+							SequentialAnimation on errorColor {
+								id: anim
+								loops: Animation.Infinite
+								running: !tempWarning
+								ColorAnimation {from: "white"; to: "red"; duration: 300 }
+								ColorAnimation { from: "red"; to: "white";  duration: 300 }
+    							}
 						}
 					}
-
-
-
-
-
-
 				}
 			}
 		}
 
 		
-
+			
+			
 	
 
 

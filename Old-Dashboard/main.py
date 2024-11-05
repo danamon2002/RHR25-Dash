@@ -39,7 +39,7 @@ class ParameterUpdater(QObject):
 
 		self.timer = QTimer()
 		self.timer.timeout.connect(self.update_parameters)
-		self.timer.start(200)  # Update every x second
+		self.timer.start(250)  # Update every x second
 
 	def update_parameters(self):
         # Example: Update parameters
