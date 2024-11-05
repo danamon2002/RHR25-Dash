@@ -220,9 +220,6 @@ ApplicationWindow{
 			function onTempChanged(msg) { 
 				tempValue = msg;
 			}
-			function onOilGreen(msg) {
-				oilGreen = msg;
-			}
 		}
 	}
 }
