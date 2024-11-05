@@ -20,7 +20,8 @@ ApplicationWindow{
 	property string tempValue: "0"
 	property double scaleFactor: 0.099
 	property double rectWidth: parseFloat(rpmValue) * scaleFactor
-	//property double tachGreen: qml.pow(-2, (-0.0001 * parseFloat(rpmValue) - 14 ) + 1)
+	property double oilLightInd: parseFloat(oilValue) 				//Double to be checked 
+	property double tempLightInd: parseFloat(tempValue)
 	property double tachGreen: 1.6 - parseFloat(rpmValue) / 14000
 	property double tachRed: parseFloat(rpmValue) / 14000
 
@@ -120,6 +121,10 @@ ApplicationWindow{
 		
 		
 
+		
+	
+
+		
 		RowLayout {
 			anchors.fill: parent
 			Layout.alignment: Qt.AlignVCenter
@@ -128,27 +133,80 @@ ApplicationWindow{
 				Text {
 					text: oilValue
 					font.pixelSize: 64
-					color: "red"
-				}
+					color: "white"
+
+					Rectangle{								//Oil pressure warning 
+						anchors.top: parent.bottom
+						anchors.margins: 50
+						x: 93
+						Rectangle{
+							width:  50
+							height: 50
+							radius: 40
+							property bool oilWarning: (oilLightInd >= 35) && (oilLightInd <= 60)
+							color: oilWarning ? normalColor : errorColor
+    						property color normalColor: Qt.rgba(0,1,0,1)
+							property color errorColor: Qt.rgba(1,0,0,1)
+							SequentialAnimation on errorColor {			//Blink
+								loops: Animation.Infinite
+								running: !oilWarning
+								ColorAnimation {from: "white"; to: "red"; duration: 300 }
+								ColorAnimation { from: "red"; to: "white";  duration: 300 }
+    							}
+						}
+					}
+			     }
 			}
+			
 		    ColumnLayout {
 				Layout.alignment: Qt.AlignCenter
 				Text {
 					text: rpmValue
 					font.pixelSize: 64
-					color: "chartreuse"
+					color: "white"
 				}
 			}
+
 			ColumnLayout {
 				Layout.alignment: Qt.AlignRight
 				Text {
 					text: tempValue
 					font.pixelSize: 64
-					color: "cyan"
+					color: "white"
+
+					Rectangle{							//Engine temp warning
+						anchors.top: parent.bottom
+						anchors.right: parent.right
+						anchors.margins: 50
+						Rectangle{
+							x: -90
+							width:  50
+							height: 50
+							radius: 40
+							property bool tempWarning: (tempLightInd <= 100) && (tempLightInd >= 70)
+							color: tempWarning ? normalColor : errorColor
+    						property color normalColor: Qt.rgba(0,1,0,1)
+							property color errorColor: Qt.rgba(1,0,0,1)
+							SequentialAnimation on errorColor {
+								id: anim
+								loops: Animation.Infinite
+								running: !tempWarning
+								ColorAnimation {from: "white"; to: "red"; duration: 300 }
+								ColorAnimation { from: "red"; to: "white";  duration: 300 }
+    							}
+						}
+					}
 				}
 			}
 		}
+
+		
+			
+			
 	
+
+
+		
 		Connections {	// Updater object exposes variables to python function
 			
 			target: parameterUpdater
@@ -161,6 +219,9 @@ ApplicationWindow{
 			}
 			function onTempChanged(msg) { 
 				tempValue = msg;
+			}
+			function onOilGreen(msg) {
+				oilGreen = msg;
 			}
 		}
 	}
