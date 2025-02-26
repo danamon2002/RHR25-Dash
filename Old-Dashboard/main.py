@@ -25,6 +25,7 @@ engine.load('main.qml')
 
 print("Loaded file \'main.qml\' from working dir.")
 
+
 class ParameterUpdater(QObject):
 
 	oilChanged = pyqtSignal(str, arguments=['oilValue'])
@@ -36,6 +37,7 @@ class ParameterUpdater(QObject):
 		self.oil_value = "0"
 		self.rpm_value = "1500"
 		self.temp_value = "0"
+		self.switch = True
 
 		self.timer = QTimer()
 		self.timer.timeout.connect(self.update_parameters)
@@ -43,9 +45,18 @@ class ParameterUpdater(QObject):
 
 	def update_parameters(self):
         # Example: Update parameters
-		self.oil_value = str(round(float(self.oil_value) + 1.2, 1))
-		self.rpm_value = str(int(self.rpm_value) + 200)
-		self.temp_value = str(round(float(self.temp_value) + 1.41, 1))
+		if self.switch == True:
+			self.oil_value = str(round(float(self.oil_value) + 1.2, 1))
+			self.rpm_value = str(int(self.rpm_value) + 100)
+			self.temp_value = str(round(float(self.temp_value) + 1.41, 1))
+		if self.switch == False:
+			self.oil_value = str(round(float(self.oil_value) - 1.2, 1))
+			self.rpm_value = str(int(self.rpm_value) - 100)
+			self.temp_value = str(round(float(self.temp_value) - 1.41, 1))
+		if self.rpm_value == str(int(17000)):
+			self.switch = False
+		if self.rpm_value == str(int(0)):
+			self.switch = True
 
         # Emit signals to notify QML of parameter changes
 		self.oilChanged.emit(self.oil_value + "PSI")
